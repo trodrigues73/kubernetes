@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: splunk-ingress
+  namespace: theo
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"  # si pas de TLS
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: splunk.intech.levitt.fr
+      http:
+        paths:
+          - path: /services/collector
+            pathType: Prefix
+            backend:
+              service:
+                name: splunk
+                port:
+                  number: 8088
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: splunk
+                port:
+                  number: 8000

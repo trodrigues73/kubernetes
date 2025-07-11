@@ -1,0 +1,30 @@
+clusterName: k8s-theo-cluster
+
+splunkPlatform:
+  endpoint: http://splunk.intech.levitt.fr:8088/services/collector  # ou ton ingress DNS
+  token: 65ee9c41-ba18-4eb6-98c4-ef808c9641c6
+  metricsIndex: metrics
+  index: main
+
+logsEngine: otel  # Remplace fluentd (deprecated)
+
+agent:
+  enabled: true
+  config:
+    extensions:
+      health_check: {}
+
+    service:
+      extensions: [health_check]
+      pipelines:
+        logs:
+          receivers: [otlp]
+          processors: []
+          exporters: [splunk_hec]
+
+    exporters:
+      splunk_hec:
+        token: 65ee9c41-ba18-4eb6-98c4-ef808c9641c6
+        endpoint: http://splunk.intech.levitt.fr:8088/services/collector
+        index: main
+

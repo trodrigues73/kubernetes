@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: splunk
+  namespace: theo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: splunk
+  template:
+    metadata:
+      labels:
+        app: splunk
+    spec:
+      containers:
+        - name: splunk
+          image: splunk/splunk:latest
+          ports:
+            - containerPort: 8000  # Web UI
+            - containerPort: 8088  # HEC endpoint
+          env:
+            - name: SPLUNK_START_ARGS
+              value: "--accept-license"
+            - name: SPLUNK_PASSWORD
+              value: Admin1234!
+            - name: SPLUNK_HEC_ENABLE
+              value: "true"
+            - name: SPLUNK_HEC_TOKEN
+              value: 65ee9c41-ba18-4eb6-98c4-ef808c9641c6
+
